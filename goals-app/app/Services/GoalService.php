@@ -9,31 +9,35 @@ use Illuminate\Database\Eloquent\Collection;
 
 class GoalService
 {
-    public function getAllGoals(): Collection
+    public function list(?int $categoryId = null, ?string $status = null): Collection
     {
-        return Goal::with('categories')->latest()->get();
+        return Goal::with('categories')
+            ->when($categoryId, function ($query) use ($categoryId) {
+                $query->whereHas('categories', fn($q) => $q->where('categories.id', $categoryId));
+            })
+            ->when($status, fn($query) => $query->where('status', $status))
+            ->latest()
+            ->get();
     }
 
-    public function getGoalById(int $id): Goal
+    public function find(int $id): Goal
     {
         return Goal::with('categories')->findOrFail($id);
     }
 
-    /**
-     * Crée ou met à jour un objectif avec gestion d'image et catégories.
-     */
-    public function persistGoal(array $data, ?int $id = null): Goal
+    // Unified "Save" logic. If Goal is provided, it updates; otherwise, creates.
+    public function save(array $data, ?Goal $goal = null): Goal
     {
-        $goal = $id ? Goal::findOrFail($id) : new Goal();
+        $goal = $goal ?? new Goal();
 
         if (isset($data['image']) && $data['image'] instanceof UploadedFile) {
-            $data['image'] = $this->handleImageStorage($data['image'], $goal->image);
+            $data['image'] = $this->uploadImage($data['image'], $goal->image);
         }
 
         $goal->fill($data);
         
-        if (!$id) {
-            $goal->user_id = auth()->id() ?? 1; // Défaut pour le développement
+        if (!$goal->exists) {
+            $goal->user_id = auth()->id() ?? 1;
         }
 
         $goal->save();
@@ -45,16 +49,16 @@ class GoalService
         return $goal->load('categories');
     }
 
-    public function removeGoal(int $id): bool
+    // Use the Model instead of ID for better readability
+    public function delete(Goal $goal): bool
     {
-        $goal = Goal::findOrFail($id);
         if ($goal->image) {
             Storage::disk('public')->delete($goal->image);
         }
         return $goal->delete();
     }
 
-    private function handleImageStorage(UploadedFile $file, ?string $oldPath): string
+    private function uploadImage(UploadedFile $file, ?string $oldPath): string
     {
         if ($oldPath) {
             Storage::disk('public')->delete($oldPath);
