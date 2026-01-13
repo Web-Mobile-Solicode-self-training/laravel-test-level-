@@ -12,7 +12,7 @@
         <nav class="max-w-[85rem] w-full mx-auto px-4 sm:flex sm:items-center sm:justify-between py-3" aria-label="Global">
             
             <div class="flex items-center justify-between">
-                <a class="flex items-center gap-x-2 text-2xl font-black text-blue-600 tracking-tight" href="{{ route('index') }}">
+                <a class="flex items-center gap-x-2 text-2xl font-black text-blue-600 tracking-tight" href="{{ route('public.index') }}">
                     <div class="bg-blue-600 p-1 rounded-lg">
                         <i data-lucide="target" class="w-6 h-6 text-white"></i>
                     </div>
@@ -30,17 +30,9 @@
             <div id="navbar-collapse-basic" class="hs-collapse hidden overflow-hidden transition-all duration-300 basis-full grow sm:block">
                 <div class="flex flex-col gap-5 mt-5 sm:flex-row sm:items-center sm:justify-end sm:mt-0 sm:ps-5">
                     
-                    <a class="flex items-center gap-x-2 font-semibold {{ Route::is('index') ? 'text-blue-600' : 'text-slate-600 hover:text-blue-600' }} transition-colors" href="{{ route('index') }}">
+                    <a class="flex items-center gap-x-2 font-semibold {{ Route::is('public.index') ? 'text-blue-600' : 'text-slate-600 hover:text-blue-600' }} transition-colors" href="{{ route('public.index') }}">
                         <i data-lucide="home" class="w-4 h-4"></i>
                         Accueil
-                    </a>
-
-                    <div class="hidden sm:block border-s border-slate-300 h-6 mx-2"></div>
-
-                    <a class="flex items-center gap-x-2 py-2 px-4 font-bold text-sm rounded-xl transition-all {{ Route::is('admin.index') ? 'bg-blue-600 text-white shadow-lg shadow-blue-200' : 'bg-slate-100 text-slate-700 hover:bg-slate-200' }}" 
-                       href="{{ route('admin.index') }}">
-                        <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
-                        Espace Admin
                     </a>
                     
                 </div>
