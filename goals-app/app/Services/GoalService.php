@@ -9,13 +9,16 @@ use Illuminate\Database\Eloquent\Collection;
 
 class GoalService
 {
-    public function list(?int $categoryId = null, ?string $status = null): Collection
+public function list(?int $categoryId = null, ?string $status = null, ?string $search = null): Collection
     {
         return Goal::with('categories')
             ->when($categoryId, function ($query) use ($categoryId) {
-                $query->whereHas('categories', fn($q) => $q->where('categories.id', $categoryId));
+                $query->whereHas('categories', function ($q) use ($categoryId) {
+                    $q->where('categories.id', $categoryId);
+                });
             })
-            ->when($status, fn($query) => $query->where('status', $status))
+            ->when($status, fn($q) => $q->where('status', $status))
+            ->when($search, fn($q) => $q->where('title', 'like', "%{$search}%"))
             ->latest()
             ->get();
     }

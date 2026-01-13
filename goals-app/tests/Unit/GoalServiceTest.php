@@ -1,10 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Unit;
 
-use App\Models\User;
-use App\Models\Goal;
 use App\Models\Category;
+use App\Models\Goal;
 use App\Services\GoalService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Test;
@@ -12,41 +13,67 @@ use Tests\TestCase;
 
 class GoalServiceTest extends TestCase
 {
-    use RefreshDatabase; // This will migrate:fresh your goals_app_test DB
+    use RefreshDatabase;
 
-    private GoalService $service;
+    private GoalService $goalService;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->service = new GoalService();
+        $this->seed();
+        $this->goalService = app(GoalService::class);
     }
 
     #[Test]
-    public function it_can_persist_a_new_goal_with_categories()
+    public function it_gets_all_goals(): void
     {
-        // 1. Create a user (required by your migration)
-        $user = User::factory()->create();
-        $this->actingAs($user);
+        $results = $this->goalService->list();
+        $this->assertCount(3, $results);
+    }
 
-        // 2. Create a category
-        $category = Category::create(['name' => 'Tech']);
+    #[Test]
+    public function it_filters_by_title_only(): void
+    {
+        // Act: Search for 'Portfolio'
+        $results = $this->goalService->list(search: 'Portfolio');
 
-        $data = [
-            'title' => 'Finish Laravel Project',
-            'description' => 'Adding i18n support',
-            'status' => 'in_progress',
-            'category_ids' => [$category->id]
-        ];
+        // Assert
+        $this->assertCount(1, $results);
+        $this->assertEquals('Créer un Portfolio', $results->first()->title);
+    }
 
-        // 3. Act
-        $goal = $this->service->save($data);
+    #[Test]
+    public function it_filters_by_category_only(): void
+    {
+        // Arrange: Find 'Développement Web' (Linked to Laravel and Portfolio in your data)
+        $category = Category::where('name', 'Développement Web')->first();
 
-        // 4. Assert
-        $this->assertDatabaseHas('goals', ['title' => 'Finish Laravel Project']);
-        $this->assertDatabaseHas('category_goal', [
-            'goal_id' => $goal->id,
-            'category_id' => $category->id
-        ]);
+        // Act
+        $results = $this->goalService->list(categoryId: $category->id);
+
+        // Assert
+        $this->assertCount(2, $results);
+        $this->assertTrue($results->contains('title', 'Apprendre Laravel 12'));
+    }
+
+    #[Test]
+    public function it_updates_a_goal(): void
+    {
+        $goal = Goal::first();
+        
+        $this->goalService->save(['title' => 'New Title'], $goal);
+
+        $this->assertDatabaseHas('goals', ['id' => $goal->id, 'title' => 'New Title']);
+    }
+
+    #[Test]
+    public function it_deletes_a_goal(): void
+    {
+        $goal = Goal::first();
+        $id = $goal->id;
+
+        $this->goalService->delete($goal);
+
+        $this->assertDatabaseMissing('goals', ['id' => $id]);
     }
 }
