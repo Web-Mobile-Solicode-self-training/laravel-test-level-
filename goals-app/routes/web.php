@@ -2,15 +2,14 @@
 
 use App\Http\Controllers\GoalController;
 use Illuminate\Support\Facades\Route;
-
-
-
-use App\Http\Controllers\Admin\GoalController as AdminGoalController;
+use App\Http\Controllers\AdminController;
 
 Route::get('/', [GoalController::class, 'index'])->name('public.index');
 
-Route::prefix('admin')->name('admin.')->group(function () {
-    Route::resource('goals', AdminGoalController::class);
+// Admin Routes 
+Route::prefix('admin')->name('admin.goals.')->group(function () {
+    Route::get('/goals', [AdminController::class, 'index'])->name('index');
+    Route::post('/goals/store', [AdminController::class, 'store'])->name('store');
+    Route::get('/goals/{id}/edit', [AdminController::class, 'edit'])->name('edit');
+    Route::delete('/goals/{id}', [AdminController::class, 'destroy'])->name('destroy');
 });
-
-
