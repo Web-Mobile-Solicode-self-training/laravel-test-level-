@@ -1,56 +1,47 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Models\Goal;
-use App\Models\Category;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use App\Services\{GoalService, CategoryService};
+use Illuminate\Http\{Request, JsonResponse};
 
 class GoalController extends Controller
 {
+    // PHP 8+ Constructor Property Promotion
+    public function __construct(
+        protected GoalService $goalService,
+        protected CategoryService $categoryService
+    ) {}
+
     public function index(Request $request)
     {
-        $categories = Category::all();
-        $search = $request->input('search');
+        $goals = $this->goalService->list(
+            categoryId: $request->category_id,
+            status: $request->status,
+            search: $request->search
+        );
 
-        $goals = Goal::with('categories')
-            ->when($search, function($query, $search) {
-                return $query->where('title', 'like', "%{$search}%");
-            })->latest()->get();
-
-        if ($request->ajax()) {
-            return view('admin.partials.table', compact('goals'))->render();
-        }
-
-        return view('admin.index', compact('goals', 'categories'));
+        return $request->ajax() 
+            ? view('admin.partials.table', compact('goals'))->render()
+            : view('admin.index', [
+                'goals' => $goals,
+                'categories' => $this->categoryService->all()
+            ]);
     }
 
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'status' => 'required|in:todo,in_progress,completed',
-            'image' => 'nullable|image|max:2048',
-            'category_ids' => 'nullable|array'
+        $data = $request->validate([
+            'title'          => 'required|string|max:255',
+            'description'    => 'nullable|string',
+            'status'         => 'required|in:todo,in_progress,completed',
+            'image'          => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'category_ids'   => 'nullable|array',
+            'category_ids.*' => 'exists:categories,id',
         ]);
 
-        return DB::transaction(function () use ($request, $validated) {
-            $goal = new Goal($validated);
-            $goal->user_id = auth()->id() ?? 1; // Default for prototype
+        $this->goalService->save($data);
 
-            if ($request->hasFile('image')) {
-                $goal->image = $request->file('image')->store('goals', 'public');
-            }
-
-            $goal->save();
-
-            if ($request->has('category_ids')) {
-                $goal->categories()->sync($request->category_ids);
-            }
-
-            return response()->json(['success' => true]);
-        });
+        return response()->json(['success' => true, 'message' => 'Objectif ajouté'], 201);
     }
 }

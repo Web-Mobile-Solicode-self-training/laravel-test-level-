@@ -14,7 +14,5 @@
             @endforeach
         </td>
         <td class="px-6 py-4 text-sm font-medium text-gray-800">{{ $goal->description }}</td>
-    <td class="px-6 py-4 text-end">
-        <button onclick="deleteGoal('{{ route('admin.goals.destroy', $goal->id) }}', '{{ __('messages.confirm_delete') }}')" class="text-red-600 text-sm hover:underline">{{ __('messages.buttons.delete') }}</button>
-    </td>
-@endforeach
+    </tr>
+@endforeach 
