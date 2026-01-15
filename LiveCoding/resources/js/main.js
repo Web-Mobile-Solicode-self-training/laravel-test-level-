@@ -1,6 +1,5 @@
 // --- Modal Controls ---
 window.openModal = function () {
-    console.log('Opening modal...');
     const modal = document.getElementById('hs-modal-add-goal');
     if (modal) {
         modal.classList.remove('hidden');
@@ -41,14 +40,12 @@ document.addEventListener('DOMContentLoaded', () => {
             const btn = document.getElementById('submit-btn');
             btn.disabled = true;
 
-            const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
             fetch(this.action, {
                 method: 'POST',
                 body: new FormData(this),
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest',
-                    'X-CSRF-TOKEN': token
                 }
             })
                 .then(res => res.json())
