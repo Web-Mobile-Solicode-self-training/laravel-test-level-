@@ -32,7 +32,7 @@ class AdminController extends Controller
             return view('admin.goals.partials.table', compact('goals'))->render();
         }
 
-        return view('admin.goals.index', compact('goals', 'categories'));
+        return view('admin.index', compact('goals', 'categories'));
     }
 
     // Create & Update (Unified via GoalService->save)

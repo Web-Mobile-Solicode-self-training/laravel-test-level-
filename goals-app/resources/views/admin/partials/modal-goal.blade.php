@@ -1,6 +1,6 @@
 <div id="hs-goal-modal" class="hs-overlay hidden size-full fixed top-0 start-0 z-[80] overflow-x-hidden overflow-y-auto">
   <div class="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all sm:max-w-lg sm:w-full m-3 sm:mx-auto">
-    <form id="goal-form" enctype="multipart/form-data" class="flex flex-col bg-white border shadow-sm rounded-2xl">
+    <form id="goal-form" action="{{ route('admin.goals.store') }}" method="POST" enctype="multipart/form-data" class="flex flex-col bg-white border shadow-sm rounded-2xl">
       @csrf
       <input type="hidden" name="goal_id" id="form-goal-id">
       
@@ -55,44 +55,3 @@
     </form>
   </div>
 </div>
-
-<script>
-    const modal = document.getElementById('hs-goal-modal');
-    
-    function openAddModal() {
-        document.getElementById('goal-form').reset();
-        document.getElementById('form-goal-id').value = '';
-        document.getElementById('modal-title').innerText = "Nouvel Objectif";
-        HSOverlay.open('#hs-goal-modal');
-    }
-
-    function editGoal(id) {
-        fetch(`/admin/goals/edit/${id}`)
-        .then(res => res.json())
-        .then(data => {
-            document.getElementById('modal-title').innerText = "Modifier l'objectif";
-            document.getElementById('form-goal-id').value = data.goal.id;
-            document.getElementById('form-title').value = data.goal.title;
-            document.getElementById('form-description').value = data.goal.description;
-            document.getElementById('form-status').value = data.goal.status;
-            document.getElementById('form-progress').value = data.goal.progress;
-            
-            // Sync categories
-            document.querySelectorAll('.category-checkbox').forEach(cb => {
-                cb.checked = data.category_ids.includes(parseInt(cb.value));
-            });
-
-            HSOverlay.open('#hs-goal-modal');
-        });
-    }
-
-    document.getElementById('goal-form').addEventListener('submit', function(e) {
-        e.preventDefault();
-        let formData = new FormData(this);
-        fetch("{{ route('admin.goals.store') }}", {
-            method: 'POST',
-            body: formData,
-            headers: { 'X-Requested-With': 'XMLHttpRequest' }
-        }).then(() => location.reload());
-    });
-</script>

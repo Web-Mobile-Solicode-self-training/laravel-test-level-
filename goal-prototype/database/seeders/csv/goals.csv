@@ -1,0 +1,4 @@
+user_id,title,description,status,image,categories
+1,Apprendre Laravel 12,Maîtriser les nouveautés,in_progress,laravel.png,"Développement Web, Design UI/UX"
+1,Créer un Portfolio,Utiliser Tailwind CSS,todo,portfolio.png,"Développement Web, Finance"
+1,Marathon 2026,Entraînement 10km,in_progress,marathon.png,"Sport & Santé, Finance"

@@ -24,8 +24,8 @@
         <span class="text-[10px] text-slate-500">{{ $goal->progress }}%</span>
     </td>
     <td class="px-6 py-4 text-end space-x-3">
-        <button onclick="editGoal({{ $goal->id }})" class="text-blue-600 hover:text-blue-800 font-medium text-sm">Editer</button>
-        <button onclick="deleteGoal({{ $goal->id }})" class="text-red-600 hover:text-red-800 font-medium text-sm">Supprimer</button>
+        <button onclick="editGoal('{{ route('admin.goals.edit', $goal->id) }}')" class="text-blue-600 hover:text-blue-800 font-medium text-sm">Editer</button>
+        <button onclick="deleteGoal('{{ route('admin.goals.destroy', $goal->id) }}')" class="text-red-600 hover:text-red-800 font-medium text-sm">Supprimer</button>
     </td>
 </tr>
 @endforeach
