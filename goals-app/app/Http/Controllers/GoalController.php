@@ -24,4 +24,10 @@ class GoalController extends Controller
 
         return view('public.index', compact('goals', 'categories'));
     }
+
+    public function show($id)
+    {
+        $goal = $this->goalService->find($id);
+        return view('public.show', compact('goal'));
+    }
 }
