@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Collection;
 
 class GoalService
 {
-public function list(?int $categoryId = null, ?string $status = null, ?string $search = null): Collection
+    public function list(?int $categoryId = null, ?string $status = null, ?string $search = null): Collection
     {
         return Goal::with('categories')
             ->when($categoryId, function ($query) use ($categoryId) {
@@ -38,7 +38,7 @@ public function list(?int $categoryId = null, ?string $status = null, ?string $s
         }
 
         $goal->fill($data);
-        
+
         if (!$goal->exists) {
             $goal->user_id = auth()->id() ?? 1;
         }

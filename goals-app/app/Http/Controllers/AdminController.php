@@ -21,32 +21,38 @@ class AdminController extends Controller
     public function index()
     {
         return view('admin.index', [
-            'goals' => $this->goalService->getAllGoals(),
-            'categories' => $this->categoryService->getAllCategories() // Utilisation du service dédié
+            'goals' => $this->goalService->list(),
+            'categories' => $this->categoryService->all()
         ]);
     }
 
     public function save(Request $request): JsonResponse
     {
         $request->validate([
+            'id' => 'nullable|integer|exists:goals,id',
             'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
             'status' => 'required|in:todo,in_progress,completed',
             'image' => 'nullable|image|max:2048',
+            'category_ids' => 'nullable|array',
+            'category_ids.*' => 'exists:categories,id',
         ]);
 
-        $this->goalService->persistGoal($request->all(), $request->id);
+        $goal = $request->id ? $this->goalService->find($request->id) : null;
+        $this->goalService->save($request->all(), $goal);
 
         return response()->json(['success' => true]);
     }
 
     public function edit(int $id): JsonResponse
     {
-        return response()->json($this->goalService->getGoalById($id));
+        return response()->json($this->goalService->find($id));
     }
 
     public function destroy(int $id): JsonResponse
     {
-        $this->goalService->removeGoal($id);
+        $goal = $this->goalService->find($id);
+        $this->goalService->delete($goal);
         return response()->json(['success' => true]);
     }
 }
