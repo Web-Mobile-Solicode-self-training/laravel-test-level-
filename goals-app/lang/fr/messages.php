@@ -1,11 +1,44 @@
 <?php
+
 return [
-    'welcome_title' => 'Découvrez les Objectifs',
-    'welcome_subtitle' => 'Explorez les défis et les projets prévus pour 2026.',
-    'nav_home' => 'Accueil',
-    'nav_explore' => 'Exploration',
-    'nav_admin' => 'Espace Admin',
-    'status_todo' => 'À faire',
-    'status_in_progress' => 'En cours',
-    'status_completed' => 'Terminé',
+    'management' => 'Gestion des Objectifs',
+    'subtitle' => 'Gérez vos articles et objectifs personnels.',
+    'new_article' => 'Nouvel Article',
+    'create_article' => 'Créer un article',
+    'search_placeholder' => 'Rechercher par titre...',
+    'columns' => [
+        'image' => 'Image',
+        'details' => 'Détails',
+        'categories' => 'Catégories',
+        'status' => 'Statut',
+        'actions' => 'Actions',
+        'description' => 'Description',
+    ],
+    'buttons' => [
+        'delete' => 'Supprimer',
+        'cancel' => 'Annuler',
+        'save' => 'Enregistrer',
+        'close' => 'Fermer',
+    ],
+    'modal' => [
+        'title' => 'Nouvel Article',
+        'subtitle' => 'Ajoutez une nouvelle entrée à votre collection.',
+        'form' => [
+            'title' => "Titre de l'article",
+            'title_placeholder' => 'Ex: Mon voyage au Japon...',
+            'description' => 'Description',
+            'description_placeholder' => 'Une courte description...',
+            'status' => 'Statut',
+            'categories' => 'Catégories',
+            'cover_image' => 'Image de couverture',
+            'upload_text' => 'Cliquez pour uploader',
+            'upload_hint' => 'PNG, JPG (MAX. 2MB)',
+        ],
+        'status_options' => [
+            'todo' => 'À faire',
+            'in_progress' => 'En cours',
+            'completed' => 'Terminé',
+        ],
+    ],
+    'confirm_delete' => 'Supprimer cet article ?',
 ];
