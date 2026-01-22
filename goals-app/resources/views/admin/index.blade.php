@@ -116,6 +116,10 @@
                 </table>
             </div>
         </div>
+        
+        <div class="mt-6">
+            {{ $goals->links() }}
+        </div>
     </div>
 
     @include('admin.modals.goal-modal')

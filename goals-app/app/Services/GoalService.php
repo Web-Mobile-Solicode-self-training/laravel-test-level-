@@ -5,11 +5,11 @@ namespace App\Services;
 use App\Models\Goal;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class GoalService
 {
-    public function list(?int $categoryId = null, ?string $status = null, ?string $search = null): Collection
+    public function list(?int $categoryId = null, ?string $status = null, ?string $search = null, int $perPage = 10): LengthAwarePaginator
     {
         return Goal::with('categories')
             ->when($categoryId, function ($query) use ($categoryId) {
@@ -20,7 +20,7 @@ class GoalService
             ->when($status, fn($q) => $q->where('status', $status))
             ->when($search, fn($q) => $q->where('title', 'like', "%{$search}%"))
             ->latest()
-            ->get();
+            ->paginate($perPage);
     }
 
     public function find(int $id): Goal
