@@ -82,10 +82,36 @@ async function submitForm(e) {
     }
 }
 
+function previewImage(input) {
+    const preview = document.getElementById('image-preview');
+    const container = document.getElementById('image-preview-container');
+    const placeholder = document.getElementById('upload-placeholder');
+
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            preview.src = e.target.result;
+            container.classList.remove('hidden');
+            placeholder.classList.add('hidden');
+        }
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
 function openModal() {
     document.getElementById('goal-form').reset();
     document.getElementById('goal_id').value = '';
-    document.querySelectorAll('.cat-checkbox').forEach(cb => cb.checked = false);
+
+    // Reset Preline Selects
+    const statusSelect = HSSelect.getInstance('#form-status');
+    const categoriesSelect = HSSelect.getInstance('#form-categories');
+    if (statusSelect) statusSelect.setValue('todo');
+    if (categoriesSelect) categoriesSelect.setValue([]);
+
+    // Reset Image Preview
+    document.getElementById('image-preview-container').classList.add('hidden');
+    document.getElementById('upload-placeholder').classList.remove('hidden');
+
     document.getElementById('modal-title').innerText = 'Créer un nouvel objectif';
     document.getElementById('goal-modal').classList.remove('hidden');
 }
@@ -100,11 +126,29 @@ async function editGoal(id) {
     document.getElementById('goal_id').value = goal.id;
     document.getElementById('form-title').value = goal.title;
     document.getElementById('form-description').value = goal.description;
-    document.getElementById('form-status').value = goal.status;
-    const catIds = goal.categories.map(c => c.id);
-    document.querySelectorAll('.cat-checkbox').forEach(cb => {
-        cb.checked = catIds.includes(parseInt(cb.value));
-    });
+
+    // Update Preline Selects
+    const statusSelect = HSSelect.getInstance('#form-status');
+    const categoriesSelect = HSSelect.getInstance('#form-categories');
+    if (statusSelect) statusSelect.setValue(goal.status);
+    if (categoriesSelect) {
+        const catIds = goal.categories.map(c => String(c.id));
+        categoriesSelect.setValue(catIds);
+    }
+
+    // Handle Image Preview
+    const preview = document.getElementById('image-preview');
+    const container = document.getElementById('image-preview-container');
+    const placeholder = document.getElementById('upload-placeholder');
+    if (goal.image) {
+        preview.src = `/storage/${goal.image}`;
+        container.classList.remove('hidden');
+        placeholder.classList.add('hidden');
+    } else {
+        container.classList.add('hidden');
+        placeholder.classList.remove('hidden');
+    }
+
     document.getElementById('modal-title').innerText = 'Modifier l\'objectif';
     document.getElementById('goal-modal').classList.remove('hidden');
 }
@@ -116,3 +160,4 @@ window.submitForm = submitForm;
 window.openModal = openModal;
 window.closeModal = closeModal;
 window.editGoal = editGoal;
+window.previewImage = previewImage;

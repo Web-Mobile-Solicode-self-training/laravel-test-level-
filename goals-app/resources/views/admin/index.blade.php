@@ -24,9 +24,14 @@
             </div>
             <div class="h-10 w-px bg-slate-200 hidden md:block self-center"></div>
             <div class="md:w-72">
-                <select id="filter-category" onchange="filterTable()"
-                    class="w-full border-none focus:ring-0 py-3 text-sm text-slate-600 cursor-pointer"
-                    style="outline: none;">
+                <select id="filter-category" onchange="filterTable()" data-hs-select='{
+                                    "placeholder": "Toutes les catégories",
+                                    "toggleTag": "<button type=\"button\" aria-expanded=\"false\"></button>",
+                                    "toggleClasses": "hs-select-disabled:pointer-events-none hs-select-disabled:opacity-50 relative py-3 ps-4 pe-9 flex gap-x-2 text-nowrap w-full cursor-pointer bg-white border border-slate-200 rounded-xl text-sm text-start focus:ring-2 focus:ring-blue-500 transition-all outline-none",
+                                    "dropdownClasses": "mt-2 z-50 w-full max-h-72 p-1 space-y-0.5 bg-white border border-slate-200 rounded-xl overflow-hidden overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-slate-100 [&::-webkit-scrollbar-thumb]:bg-slate-300",
+                                    "optionClasses": "py-2 px-4 w-full text-sm text-slate-800 cursor-pointer hover:bg-slate-100 rounded-lg focus:outline-none focus:bg-slate-100",
+                                    "optionTemplate": "<div class=\"flex justify-between items-center w-full\"><span data-title></span><span class=\"hidden hs-selected:block\"><i data-lucide=\"check\" class=\"w-4 h-4 text-blue-600\"></i></span></div>"
+                                }' class="hidden">
                     <option value="">Toutes les catégories</option>
                     @foreach($categories as $cat)
                         <option value="{{ $cat->name }}">{{ $cat->name }}</option>
@@ -40,14 +45,17 @@
                 <table class="min-w-full divide-y divide-slate-200">
                     <thead class="bg-slate-50/50">
                         <tr>
+                            <th
+                                class="px-6 py-4 text-left text-[11px] font-bold text-slate-500 uppercase tracking-wider w-20">
+                                Image</th>
                             <th class="px-6 py-4 text-left text-[11px] font-bold text-slate-500 uppercase tracking-wider">
-                                Objectif</th>
-                            <th class="px-6 py-4 text-left text-[11px] font-bold text-slate-500 uppercase tracking-wider">
-                                Statut</th>
+                                Titre</th>
                             <th class="px-6 py-4 text-left text-[11px] font-bold text-slate-500 uppercase tracking-wider">
                                 Catégories</th>
+                            <th class="px-6 py-4 text-left text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                                Description</th>
                             <th class="px-6 py-4 text-right text-[11px] font-bold text-slate-500 uppercase tracking-wider">
-                                Actions</th>
+                                Outils</th>
                         </tr>
                     </thead>
                     <tbody id="goal-table-body" class="divide-y divide-slate-200">
@@ -56,30 +64,16 @@
                                 data-title="{{ strtolower($goal->title) }}"
                                 data-category="{{ $goal->categories->pluck('name')->join(',') }}">
                                 <td class="px-6 py-4">
-                                    <div class="flex items-center gap-4">
-                                        <div class="relative flex-shrink-0">
-                                            <img src="{{ $goal->image ? asset('storage/' . $goal->image) : 'https://placehold.co/100x100?text=Goal' }}"
-                                                class="w-12 h-12 rounded-xl object-cover ring-1 ring-slate-200 shadow-sm">
-                                        </div>
-                                        <div
-                                            class="font-semibold text-slate-800 text-sm group-hover:text-blue-600 transition-colors">
-                                            {{ $goal->title }}
-                                        </div>
+                                    <div class="relative flex-shrink-0">
+                                        <img src="{{ $goal->image ? asset('storage/' . $goal->image) : 'https://placehold.co/100x100?text=Goal' }}"
+                                            class="w-12 h-12 rounded-xl object-cover ring-1 ring-slate-200 shadow-sm">
                                     </div>
                                 </td>
                                 <td class="px-6 py-4">
-                                    @php
-                                        $statusStyles = [
-                                            'todo' => 'bg-slate-100 text-slate-700 border-slate-200',
-                                            'in_progress' => 'bg-blue-50 text-blue-700 border-blue-100',
-                                            'completed' => 'bg-emerald-50 text-emerald-700 border-emerald-100',
-                                        ];
-                                        $style = $statusStyles[$goal->status] ?? $statusStyles['todo'];
-                                    @endphp
-                                    <span
-                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border {{ $style }}">
-                                        {{ str_replace('_', ' ', ucfirst($goal->status)) }}
-                                    </span>
+                                    <div
+                                        class="font-semibold text-slate-800 text-sm group-hover:text-blue-600 transition-colors">
+                                        {{ $goal->title }}
+                                    </div>
                                 </td>
                                 <td class="px-6 py-4">
                                     <div class="flex flex-wrap gap-1.5">
@@ -90,6 +84,11 @@
                                             </span>
                                         @endforeach
                                     </div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <p class="text-sm text-slate-500 line-clamp-1 max-w-xs">
+                                        {{ $goal->description }}
+                                    </p>
                                 </td>
                                 <td class="px-6 py-4 text-right text-sm font-medium">
                                     <div class="flex justify-end gap-2">
@@ -106,7 +105,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="4" class="px-6 py-20 text-center">
+                                <td colspan="5" class="px-6 py-20 text-center">
                                     <i data-lucide="inbox" class="w-12 h-12 text-slate-300 mx-auto mb-4"></i>
                                     <p class="text-slate-500 text-sm">Aucun objectif trouvé.</p>
                                 </td>
@@ -116,9 +115,9 @@
                 </table>
             </div>
         </div>
-        
-        <div class="mt-6">
-            {{ $goals->links() }}
+
+        <div class="mt-8 border-t border-slate-100 pt-6">
+            {{ $goals->links('vendor.pagination.preline') }}
         </div>
     </div>
 
@@ -129,5 +128,4 @@
             saveRoute: "{{ route('admin.save') }}"
         };
     </script>
-    @vite(['resources/js/admin.js'])
 @endsection

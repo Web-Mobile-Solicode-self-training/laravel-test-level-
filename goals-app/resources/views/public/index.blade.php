@@ -84,8 +84,8 @@
                 @endforeach
             </div>
 
-            <div class="mt-12">
-                {{ $goals->links() }}
+            <div class="mt-12 border-t border-slate-100 pt-8 flex justify-center">
+                {{ $goals->links('vendor.pagination.preline') }}
             </div>
         </div>
     </div>

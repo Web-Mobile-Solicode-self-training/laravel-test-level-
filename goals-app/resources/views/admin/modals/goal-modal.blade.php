@@ -38,12 +38,18 @@
                     </div>
                 </div>
 
-                <div class="grid grid-cols-2 gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <label
                             class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Statut</label>
-                        <select name="status" id="form-status"
-                            class="w-full bg-slate-50 border-slate-200 rounded-xl p-3 text-sm border outline-none focus:border-blue-500 transition-all cursor-pointer">
+                        <select name="status" id="form-status" data-hs-select='{
+                                "placeholder": "Choisir un statut...",
+                                "toggleTag": "<button type=\"button\" aria-expanded=\"false\"></button>",
+                                "toggleClasses": "hs-select-disabled:pointer-events-none hs-select-disabled:opacity-50 relative py-3 ps-4 pe-9 flex gap-x-2 text-nowrap w-full cursor-pointer bg-white border border-slate-200 rounded-xl text-start text-sm focus:ring-2 focus:ring-blue-500 transition-all outline-none",
+                                "dropdownClasses": "mt-2 z-[70] w-full max-h-72 p-1 space-y-0.5 bg-white border border-slate-200 rounded-xl overflow-hidden overflow-y-auto",
+                                "optionClasses": "py-2 px-4 w-full text-sm text-slate-800 cursor-pointer hover:bg-slate-100 rounded-lg focus:outline-none focus:bg-slate-100",
+                                "optionTemplate": "<div class=\"flex justify-between items-center w-full\"><span data-title></span><span class=\"hidden hs-selected:block\"><i data-lucide=\"check\" class=\"w-4 h-4 text-blue-600\"></i></span></div>"
+                            }' class="hidden">
                             <option value="todo">À faire</option>
                             <option value="in_progress">En cours</option>
                             <option value="completed">Terminé</option>
@@ -52,9 +58,24 @@
                     <div>
                         <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Image
                             d'illustration</label>
-                        <div class="relative">
-                            <input type="file" name="image" id="form-image"
-                                class="w-full text-xs text-slate-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-blue-600 file:text-white hover:file:bg-blue-700 cursor-pointer">
+                        <div class="relative group">
+                            <label for="form-image" class="block cursor-pointer">
+                                <div
+                                    class="flex flex-col items-center justify-center py-4 px-3 border-2 border-dashed border-slate-200 rounded-xl bg-slate-50 hover:bg-white hover:border-blue-400 transition-all group-hover:shadow-sm">
+                                    <div id="image-preview-container" class="hidden mb-2">
+                                        <img id="image-preview" src="#"
+                                            class="w-12 h-12 rounded-lg object-cover ring-1 ring-slate-200">
+                                    </div>
+                                    <div id="upload-placeholder" class="text-center">
+                                        <i data-lucide="upload-cloud"
+                                            class="w-6 h-6 text-slate-400 mx-auto mb-1 group-hover:text-blue-500 transition-colors"></i>
+                                        <span class="text-[10px] font-bold text-slate-500 uppercase">Cliquer pour
+                                            choisir</span>
+                                    </div>
+                                </div>
+                                <input type="file" name="image" id="form-image" class="hidden"
+                                    onchange="previewImage(this)">
+                            </label>
                         </div>
                     </div>
                 </div>
@@ -62,17 +83,18 @@
                 <div>
                     <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-3">Catégories
                         associées</label>
-                    <div class="grid grid-cols-2 gap-3 bg-slate-50 p-4 rounded-2xl border border-slate-200">
+                    <select name="category_ids[]" id="form-categories" multiple data-hs-select='{
+                            "placeholder": "Choisir des catégories...",
+                            "toggleTag": "<button type=\"button\" aria-expanded=\"false\"></button>",
+                            "toggleClasses": "hs-select-disabled:pointer-events-none hs-select-disabled:opacity-50 relative py-3 ps-4 pe-9 flex gap-x-2 text-nowrap w-full cursor-pointer bg-white border border-slate-200 rounded-xl text-start text-sm focus:ring-2 focus:ring-blue-500 transition-all outline-none",
+                            "dropdownClasses": "mt-2 z-[70] w-full max-h-72 p-1 space-y-0.5 bg-white border border-slate-200 rounded-xl overflow-hidden overflow-y-auto",
+                            "optionClasses": "py-2 px-4 w-full text-sm text-slate-800 cursor-pointer hover:bg-slate-100 rounded-lg focus:outline-none focus:bg-slate-100",
+                            "optionTemplate": "<div class=\"flex justify-between items-center w-full\"><span data-title></span><span class=\"hidden hs-selected:block\"><i data-lucide=\"check\" class=\"w-4 h-4 text-blue-600\"></i></span></div>"
+                        }' class="hidden">
                         @foreach($categories as $category)
-                            <label
-                                class="flex items-center gap-3 cursor-pointer group p-2 rounded-lg hover:bg-white hover:shadow-sm transition-all border border-transparent hover:border-slate-200">
-                                <input type="checkbox" name="category_ids[]" value="{{ $category->id }}"
-                                    class="cat-checkbox w-4 h-4 text-blue-600 border-slate-300 rounded focus:ring-blue-500">
-                                <span
-                                    class="text-sm font-medium text-slate-600 group-hover:text-blue-600 transition-colors">{{ $category->name }}</span>
-                            </label>
+                            <option value="{{ $category->id }}">{{ $category->name }}</option>
                         @endforeach
-                    </div>
+                    </select>
                 </div>
 
                 <div class="flex items-center justify-end gap-3 pt-6 border-t border-slate-100">
