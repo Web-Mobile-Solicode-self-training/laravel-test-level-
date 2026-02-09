@@ -46,36 +46,12 @@
                         Accueil
                     </a>
 
-                    @auth
-                        @can('access-admin')
-                            <div class="hidden sm:block border-s border-slate-300 h-6 mx-2"></div>
-                            <a class="flex items-center gap-x-2 py-2 px-4 font-bold text-sm rounded-xl transition-all {{ Route::is('admin.index') ? 'bg-blue-600 text-white shadow-lg shadow-blue-200' : 'bg-slate-100 text-slate-700 hover:bg-slate-200' }}"
-                                href="{{ route('admin.index') }}">
-                                <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
-                                Espace Admin
-                            </a>
-                        @endcan
-
-                        <div class="hidden sm:block border-s border-slate-300 h-6 mx-2"></div>
-
-                        <div class="flex items-center gap-3">
-                            <span class="text-sm font-medium text-slate-600">{{ Auth::user()->name }}</span>
-                            <form action="{{ route('logout') }}" method="POST">
-                                @csrf
-                                <button type="submit"
-                                    class="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all"
-                                    title="Déconnexion">
-                                    <i data-lucide="log-out" class="w-4 h-4"></i>
-                                </button>
-                            </form>
-                        </div>
-                    @else
-                        <div class="hidden sm:block border-s border-slate-300 h-6 mx-2"></div>
-                        <a class="font-semibold text-slate-600 hover:text-blue-600 transition-colors"
-                            href="{{ route('login') }}">Connexion</a>
-                        <a class="py-2 px-4 font-bold text-sm rounded-xl bg-blue-600 text-white shadow-lg shadow-blue-200 hover:bg-blue-700 transition-all"
-                            href="{{ route('register') }}">S'inscrire</a>
-                    @endauth
+                    <div class="hidden sm:block border-s border-slate-300 h-6 mx-2"></div>
+                    <a class="flex items-center gap-x-2 py-2 px-4 font-bold text-sm rounded-xl transition-all {{ Route::is('admin.index') ? 'bg-blue-600 text-white shadow-lg shadow-blue-200' : 'bg-slate-100 text-slate-700 hover:bg-slate-200' }}"
+                        href="{{ route('admin.index') }}">
+                        <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
+                        Espace Admin
+                    </a>
 
                 </div>
             </div>
