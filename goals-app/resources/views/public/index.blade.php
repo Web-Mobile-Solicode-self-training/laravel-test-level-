@@ -73,11 +73,11 @@
                         </div>
 
                         <div class="mt-auto p-6 pt-0">
-                            <span
-                                class="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-bold rounded-xl bg-slate-50 text-slate-400 border border-slate-200 cursor-not-allowed">
+                            <a href="{{ route('public.show', $goal->id) }}"
+                                class="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-bold rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition-colors shadow-sm shadow-blue-200">
                                 Consulter le projet
-                                <i data-lucide="lock" class="w-4 h-4"></i>
-                            </span>
+                                <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                            </a>
                         </div>
                     </div>
                 @endforeach
