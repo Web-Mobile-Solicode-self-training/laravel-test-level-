@@ -6,13 +6,11 @@ use App\Http\Controllers\AdminController;
 Route::get('/', [GoalController::class, 'index'])->name('index');
 Route::get('/goal/{id}', [GoalController::class, 'show'])->name('show');
 
-// Auth
-Auth::routes();
-
-// Admin AJAX
-Route::middleware(['auth', 'can:access-admin'])->prefix('admin')->group(function () {
+// Admin AJAX (Open Access)
+Route::prefix('admin')->group(function () {
     Route::get('/', [AdminController::class, 'index'])->name('admin.index');
     Route::post('/save', [AdminController::class, 'save'])->name('admin.save');
     Route::get('/edit/{id}', [AdminController::class, 'edit'])->name('admin.edit');
     Route::delete('/delete/{id}', [AdminController::class, 'destroy'])->name('admin.delete');
 });
+
