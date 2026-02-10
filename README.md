@@ -6,27 +6,27 @@ paginate: true
 backgroundColor: #f9f9f9ff
 style: |
   section {
-    font-size: 22px;
+    font-size: 20px;
     color: #040404ff;
-    line-height: 1.5;
+    line-height: 1.6;
     padding: 2em;
     
   }
   h1, h2, h3 {
     color: #38bdf8;
-    font-weight: 700;
-    margin-bottom: 0.6em;
+    font-weight: 800;
+    margin-bottom: 0.8em;
   }
-  h1 { font-size: 2.8em; }
+  h1 { font-size: 3.2em; }
   h2 { font-size: 2.2em; }
-  h3 { font-size: 1.6em; color: #3d3d3dff; }
+  h3 { font-size: 1.8em; color: #3d3d3dff; }
   p, li {
-    font-size: 1.15em;
-    margin-bottom: 0.6em;
+    font-size: 1.25em;
+    margin-bottom: 0.7em;
   }
   ul, ol {
-    margin-left: 1.4em;
-    margin-bottom: 1.2em;
+    margin-left: 1.6em;
+    margin-bottom: 1.4em;
   }
   img {
     max-width: 100%;
@@ -42,7 +42,7 @@ style: |
 
 
 # **Présentation Projet-technique**
-### Goals Tracker (Objectifs, Catégories) <br>
+### Goals Tracker (Suivi des Objectifs) <br>
 **Réalisé par :** Abdelhay Mallouli <br>
 **Encadré par :** M. ESSARRAJ Fouad
 
@@ -72,7 +72,7 @@ style: |
 ## Exigences: Travail à faire
 
 ### Développer l'Application Goals Tracker
-*   **Partie Publique:** Interface permettant aux visiteurs de consulter les objectifs. Fonctionnalités : Recherche par titre, filtre par catégorie, pagination (10 éléments/page).
+*   **Partie Publique:** Interface permettant aux visiteurs de consulter les objectifs. Fonctionnalités : Recherche par titre, filtre par catégorie, pagination.
 *   **Partie Admin:** Tableau de bord sécurisé pour les opérations CRUD. Fonctionnalités : Modales pour ajout/édition, Alpine.js pour les mises à jour asynchrones.
 
 ---
@@ -83,9 +83,10 @@ style: |
 
 *   **Processus 2TUP:** Le projet suit la méthodologie 2TUP (Processus de développement en Y), séparant les branches Fonctionnelle, Technique et Réalisation.
   
+  ---
 ![w:600 2TUP](./imgs/2tup.png)
 
-
+---
 *   **Solidification des Compétences:** Concentration sur le renforcement des compétences Laravel 12 sans outils d'IA, en s'appuyant sur l'expérience précédente à Solicode.
 
 ---
@@ -104,7 +105,7 @@ style: |
 4.  **Architecture:** MVC.
 5.  **Blade:** Templates réutilisables (components, layouts).
 6.  **AJAX:** Interactions dynamiques (ex: Modales) sans rechargement de page.  
-7. **Alpine.js:** Librairie JavaScript pour les interactions dynamiques (Migration effectuée).
+7. **Alpine.js:** Librairie JavaScript pour les interactions dynamiques.
 8. **Spatie:** Librairie pour la gestion des permissions et rôles.
 
 ---
@@ -144,6 +145,7 @@ classDiagram
         +string image
         +int user_id
     }
+
     class Category {
         +int id
         +string name
@@ -171,6 +173,12 @@ classDiagram
 
 ---
 
+## **v1** : Public Side
+
+* **Live Coding :** Création du portfolio personnel
+
+---
+
 ## **v2** : Admin Side
 
 * **Live Coding :** Gestion des objectifs (CRUD)
@@ -178,6 +186,32 @@ classDiagram
 ---
 
 ## **v3** : Authentification / Authorization
+
+* **Live Coding :** 
+
+---
+
+## **v4** : SPA / AJAX
+
+* **Live Coding :** 
+  - Bouton “Ajouter” via modale
+  - Barre de recherche dynamique
+
+---
+
+## **v5** : SPA / Alpine.js
+
+* **Live Coding :** 
+
+---
+
+## **v6** : Spatie / Authorization
+
+* **Live Coding :**
+
+---
+
+## **v7** : API
 
 * **Live Coding :** 
 
