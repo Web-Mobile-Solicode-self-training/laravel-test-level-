@@ -121,15 +121,68 @@ classDiagram
 * **Barre de recherche** filtrant les objectifs par **titre**
 * Mise à jour dynamique avec **AJAX**
 
+---
 
 ## Versions
 
-| Version | Branch name | code version | 
-| :--- | :--- | :--- | 
-| v1 : Public side | public |  | 
-| v2 : Admin side | admin | prototype-admin , live-coding-admin |
-| v3 : Authontification / Authorization (Gates)| gates ||
-| v4 : SPA (Ajax - Alpine.js) | Ajax - Alpine.js | prototype-ajax , live-coding-ajax | 
-| v5 : Spatie Authoresation | spatie | live-coding-spatie | 
-| v6 : API | api |  |
-| v7 : Mobile | mobile | |
+| Version | Description | Branche |
+| :--- | :--- | :--- |
+| **v1** | Public Side (Consultation, Recherche, Filtre) | `public` |
+| **v2** | Admin Side (CRUD, Modales) | `admin` |
+| **v3** | Authentification / Authorization (Gates) | `gates` |
+| **v4** | SPA / AJAX | `spa-ajax` |
+| **v5** | SPA / Alpine.js | `spa-alpine` |
+| **v6** | Spatie / Authorization | `spatie` |
+| **v7** | API | `api` |
+| **v8** | Mobile App | `mobile` |
+
+---
+
+## **v1** : Public Side
+
+* **Live Coding :** Création du portfolio personnel
+
+---
+
+## **v2** : Admin Side
+
+* **Live Coding :** Gestion des articles (CRUD)
+
+---
+
+## **v3** : Authentification / Authorization
+
+* **Live Coding :** 
+
+---
+
+## **v4** : SPA / AJAX
+
+* **Live Coding :** 
+  - Bouton “Ajouter” via modale
+  - Barre de recherche dynamique
+
+---
+
+## **v5** : SPA / Alpine.js
+
+* **Live Coding :** 
+
+---
+
+## **v6** : Spatie / Authorization
+
+* **Live Coding :**
+
+---
+
+## **v7** : API
+
+* **Live Coding :** 
+
+---
+
+## **v8** : Mobile App
+
+* **Live Coding :** 
+---
