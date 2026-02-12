@@ -1,10 +1,11 @@
 @extends('layouts.public')
 
 @section('content')
-    <div x-data="goalTable({ 
-            goals: {{ $goals->getCollection()->toJson() }}, 
-            categories: {{ $categories->toJson() }} 
-        })" class="max-w-[85rem] px-4 py-8 mx-auto">
+    <div x-data="goalManager({ 
+                    goals: {{ $goals->getCollection()->toJson() }}, 
+                    categories: {{ $categories->toJson() }},
+                    saveRoute: '{{ route('admin.save') }}'
+                })" class="max-w-[85rem] px-4 py-8 mx-auto">
 
         <!-- Header -->
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-y-4 mb-10">
@@ -112,7 +113,6 @@
         <div class="mt-8 border-t border-slate-100 pt-6">
             {{ $goals->links('vendor.pagination.preline') }}
         </div>
+        @include('admin.modals.goal-modal')
     </div>
-
-    @include('admin.modals.goal-modal')
 @endsection

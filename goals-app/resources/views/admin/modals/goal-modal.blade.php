@@ -1,7 +1,4 @@
-<div x-data="goalModal({ 
-    saveRoute: '{{ route('admin.save') }}',
-    categories: {{ $categories->toJson() }}
-})" x-show="isOpen" @open-goal-modal.window="handleOpen" x-transition:enter="transition ease-out duration-300"
+<div x-show="isOpen" @open-goal-modal.window="handleOpen" x-transition:enter="transition ease-out duration-300"
     x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
     x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100"
     x-transition:leave-end="opacity-0" class="fixed inset-0 z-[60] overflow-y-auto bg-slate-900/40 backdrop-blur-sm p-4"
@@ -22,7 +19,7 @@
                 </button>
             </div>
 
-            <form @submit.prevent="submitForm" enctype="multipart/form-data" class="p-8 space-y-6">
+            <form @submit.prevent="handleSubmit" enctype="multipart/form-data" class="p-8 space-y-6">
                 @csrf
                 <input type="hidden" name="id" :value="currentGoal.id">
 
