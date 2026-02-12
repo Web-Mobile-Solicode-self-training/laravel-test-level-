@@ -2,10 +2,10 @@
 
 @section('content')
     <div x-data="goalManager({ 
-                    goals: {{ $goals->getCollection()->toJson() }}, 
-                    categories: {{ $categories->toJson() }},
-                    saveRoute: '{{ route('admin.save') }}'
-                })" class="max-w-[85rem] px-4 py-8 mx-auto">
+                                    goals: {{ $goals->getCollection()->toJson() }}, 
+                                    categories: {{ $categories->toJson() }},
+                                    saveRoute: '{{ route('admin.save') }}'
+                                })" class="max-w-[85rem] px-4 py-8 mx-auto">
 
         <!-- Header -->
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-y-4 mb-10">
@@ -31,13 +31,25 @@
             </div>
             <div class="h-10 w-px bg-slate-200 hidden md:block self-center"></div>
             <div class="md:w-72">
-                <select x-model="selectedCategory"
-                    class="w-full border-none focus:ring-0 rounded-xl py-3 text-sm text-slate-700 outline-none">
-                    <option value="">Toutes les catégories</option>
-                    <template x-for="cat in categories" :key="cat.id">
-                        <option :value="cat.name" x-text="cat.name"></option>
-                    </template>
-                </select>
+                <div class="relative">
+                    <select x-model="selectedCategory" data-hs-select='{
+                                            "placeholder": "Toutes les catégories",
+                                            "toggleTag": "<button type=\"button\" aria-expanded=\"false\"></button>",
+                                            "toggleClasses": "hs-select-disabled:pointer-events-none hs-select-disabled:opacity-50 relative py-3 ps-4 pe-9 flex gap-x-2 text-nowrap w-full cursor-pointer bg-white border border-slate-200 rounded-xl text-sm text-start focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500",
+                                            "dropdownClasses": "mt-2 z-50 w-full max-h-72 p-1 space-y-0.5 bg-white border border-slate-200 rounded-xl overflow-hidden overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-slate-100 [&::-webkit-scrollbar-thumb]:bg-slate-300",
+                                            "optionClasses": "py-2 px-4 w-full text-sm text-slate-800 cursor-pointer hover:bg-slate-100 rounded-lg focus:outline-none focus:bg-slate-100",
+                                            "optionTemplate": "<div class=\"flex justify-between items-center w-full\"><span><span data-title></span></span><span class=\"hidden hs-selected:block\"><i data-lucide=\"check\" class=\"shrink-0 size-3.5 text-blue-600\"></i></span></div>"
+                                        }' class="hidden">
+                        <option value="">Toutes les catégories</option>
+                        <template x-for="cat in categories" :key="cat.id">
+                            <option :value="cat.name" x-text="cat.name"></option>
+                        </template>
+                    </select>
+
+                    <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
+                        <i data-lucide="chevron-down" class="shrink-0 size-3.5 text-slate-500"></i>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -54,6 +66,8 @@
                                 Titre</th>
                             <th class="px-6 py-4 text-left text-[11px] font-bold text-slate-500 uppercase tracking-wider">
                                 Catégories</th>
+                            <th class="px-6 py-4 text-left text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                                Statut</th>
                             <th class="px-6 py-4 text-left text-[11px] font-bold text-slate-500 uppercase tracking-wider">
                                 Description</th>
                             <th class="px-6 py-4 text-right text-[11px] font-bold text-slate-500 uppercase tracking-wider">
@@ -83,6 +97,29 @@
                                     </div>
                                 </td>
                                 <td class="px-6 py-4">
+                                    <template x-if="goal.status === 'todo'">
+                                        <span
+                                            class="inline-flex items-center gap-x-1.5 py-1 px-2 rounded-lg text-xs font-medium bg-slate-100 text-slate-800">
+                                            <span class="size-1.5 inline-block rounded-full bg-slate-400"></span>
+                                            À faire
+                                        </span>
+                                    </template>
+                                    <template x-if="goal.status === 'in_progress'">
+                                        <span
+                                            class="inline-flex items-center gap-x-1.5 py-1 px-2 rounded-lg text-xs font-medium bg-blue-100 text-blue-800">
+                                            <span class="size-1.5 inline-block rounded-full bg-blue-600"></span>
+                                            En cours
+                                        </span>
+                                    </template>
+                                    <template x-if="goal.status === 'completed'">
+                                        <span
+                                            class="inline-flex items-center gap-x-1.5 py-1 px-2 rounded-lg text-xs font-medium bg-green-100 text-green-800">
+                                            <span class="size-1.5 inline-block rounded-full bg-green-600"></span>
+                                            Terminé
+                                        </span>
+                                    </template>
+                                </td>
+                                <td class="px-6 py-4">
                                     <p class="text-sm text-slate-500 line-clamp-1 max-w-xs" x-text="goal.description"></p>
                                 </td>
                                 <td class="px-6 py-4 text-right text-sm font-medium">
@@ -100,7 +137,7 @@
                             </tr>
                         </template>
                         <tr x-show="filteredGoals.length === 0">
-                            <td colspan="5" class="px-6 py-20 text-center">
+                            <td colspan="6" class="px-6 py-20 text-center">
                                 <i data-lucide="inbox" class="w-12 h-12 text-slate-300 mx-auto mb-4"></i>
                                 <p class="text-slate-500 text-sm">Aucun objectif trouvé.</p>
                             </td>
