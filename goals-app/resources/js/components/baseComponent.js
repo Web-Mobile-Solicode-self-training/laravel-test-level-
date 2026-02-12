@@ -26,12 +26,34 @@ export const baseComponent = () => ({
             }
         });
 
+        return this.handleResponse(response);
+    },
+
+    async handleResponse(response) {
         if (!response.ok) {
             const error = await response.json();
             throw new Error(error.message || 'Une erreur est survenue.');
         }
-
         return response.json();
+    },
+
+    async submitForm(event, url, method = 'POST') {
+        const formData = new FormData(event.target);
+        try {
+            const response = await fetch(url, {
+                method: method,
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRF-TOKEN': this.token
+                }
+            });
+
+            return await this.handleResponse(response);
+        } catch (error) {
+            console.error('Form Submit Error:', error);
+            throw error;
+        }
     }
 });
 
