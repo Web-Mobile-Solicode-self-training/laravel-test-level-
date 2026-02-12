@@ -46,12 +46,12 @@
                     <div>
                         <label
                             class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Statut</label>
-                        <select name="status" x-model="currentGoal.status"
-                            class="w-full border-slate-200 rounded-xl p-3 text-sm focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 border outline-none transition-all">
+                        <x-ui.select name="status" x-model="currentGoal.status" placeholder="Sélectionner un statut"
+                            dropdown-z-index="z-[70]">
                             <option value="todo">À faire</option>
                             <option value="in_progress">En cours</option>
                             <option value="completed">Terminé</option>
-                        </select>
+                        </x-ui.select>
                     </div>
                     <div>
                         <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Image

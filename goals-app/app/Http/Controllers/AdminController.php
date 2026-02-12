@@ -51,6 +51,8 @@ class AdminController extends Controller
 
     public function destroy(int $id): JsonResponse
     {
+        \Illuminate\Support\Facades\Gate::authorize('delete-goal');
+
         $goal = $this->goalService->find($id);
         $this->goalService->delete($goal);
         return response()->json(['success' => true]);
