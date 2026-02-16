@@ -6,7 +6,6 @@ use App\Services\GoalService;
 use App\Services\CategoryService;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Gate;
 
 class AdminController extends Controller
 {
@@ -45,10 +44,10 @@ class AdminController extends Controller
         ]);
 
         if ($request->id) {
-            Gate::authorize('edit-goal');
+            $this->authorize('edit-goal');
             $goal = $this->goalService->find($request->id);
         } else {
-            Gate::authorize('create-goal');
+            $this->authorize('create-goal');
             $goal = null;
         }
 
@@ -64,7 +63,7 @@ class AdminController extends Controller
 
     public function destroy(int $id): JsonResponse
     {
-        Gate::authorize('delete-goal');
+        $this->authorize('delete-goal');
 
         $goal = $this->goalService->find($id);
         $this->goalService->delete($goal);

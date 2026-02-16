@@ -1,58 +1,281 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Goals Tracker Application
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A Laravel-based goal tracking application with role-based access control using Spatie Laravel Permission.
 
-## About Laravel
+## Features
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- **Goal Management**: Create, read, update, and delete goals
+- **Category System**: Organize goals by categories
+- **Role-Based Access Control**: Admin and Author roles with granular permissions
+- **Responsive UI**: Built with Alpine.js and Tailwind CSS
+- **Real-time Filtering**: Filter goals by category, status, and search terms
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Technology Stack
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- **Backend**: Laravel 12
+- **Frontend**: Alpine.js, Tailwind CSS, Preline UI
+- **Authentication**: Laravel UI
+- **Authorization**: Spatie Laravel Permission
+- **Icons**: Lucide Icons
+- **Database**: MySQL/MariaDB
 
-## Learning Laravel
+## Installation
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+### Prerequisites
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- PHP >= 8.2
+- Composer
+- Node.js & NPM
+- MySQL/MariaDB
 
-## Laravel Sponsors
+### Steps
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd goals-app
+   ```
 
-### Premium Partners
+2. **Install PHP dependencies**
+   ```bash
+   composer install
+   ```
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+3. **Install Node dependencies**
+   ```bash
+   npm install
+   ```
 
-## Contributing
+4. **Configure environment**
+   ```bash
+   cp .env.example .env
+   php artisan key:generate
+   ```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+5. **Configure database**
+   
+   Update `.env` with your database credentials:
+   ```env
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_DATABASE=goals_app
+   DB_USERNAME=your_username
+   DB_PASSWORD=your_password
+   ```
 
-## Code of Conduct
+6. **Run migrations**
+   ```bash
+   php artisan migrate
+   ```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+7. **Seed the database**
+   ```bash
+   php artisan db:seed
+   ```
 
-## Security Vulnerabilities
+8. **Build assets**
+   ```bash
+   npm run dev
+   ```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+9. **Start the development server**
+   ```bash
+   php artisan serve
+   ```
+
+## Role-Based Permission System
+
+This application uses **Spatie Laravel Permission** for authorization. The package provides flexible role and permission management.
+
+### Roles
+
+| Role   | Description                                    |
+|--------|------------------------------------------------|
+| Admin  | Full access to edit and delete all goals       |
+| Author | Can create, edit, and delete all goals         |
+
+### Permissions
+
+| Permission     | Description                      | Admin | Author |
+|----------------|----------------------------------|-------|--------|
+| access-admin   | Access the admin dashboard       | ✓     | ✓      |
+| create-goal    | Create new goals                 | ✗     | ✓      |
+| edit-goal      | Edit existing goals              | ✓     | ✓      |
+| delete-goal    | Delete goals                     | ✓     | ✓      |
+
+### Default User Accounts
+
+After running the seeders, you can log in with:
+
+**Admin Account**
+- Email: `admin@test.com`
+- Password: `password`
+
+**Author Account**
+- Email: `author@test.com`
+- Password: `password`
+
+## Usage
+
+### Checking Permissions in Code
+
+**In Controllers:**
+```php
+// Check permission
+$this->authorize('edit-goal');
+
+// Check role
+if ($user->hasRole('admin')) {
+    // Admin-specific logic
+}
+
+// Check permission
+if ($user->can('create-goal')) {
+    // Create goal logic
+}
+```
+
+**In Blade Templates:**
+```blade
+@can('create-goal')
+    <button>Create Goal</button>
+@endcan
+
+@role('admin')
+    <p>You are an admin!</p>
+@endrole
+
+@hasanyrole('admin|author')
+    <p>You have access!</p>
+@endhasanyrole
+```
+
+**In Routes:**
+```php
+Route::middleware(['auth', 'permission:access-admin'])->group(function () {
+    // Protected routes
+});
+
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    // Admin-only routes
+});
+```
+
+### Assigning Roles to Users
+
+```php
+$user = User::find(1);
+
+// Assign role
+$user->assignRole('author');
+
+// Remove role
+$user->removeRole('author');
+
+// Sync roles (replaces all roles)
+$user->syncRoles(['admin', 'author']);
+
+// Give permission directly
+$user->givePermissionTo('edit-goal');
+```
+
+### Creating New Roles and Permissions
+
+```php
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
+
+// Create a permission
+Permission::create(['name' => 'publish-goal']);
+
+// Create a role
+$role = Role::create(['name' => 'moderator']);
+
+// Give permission to role
+$role->givePermissionTo('publish-goal');
+
+// Assign role to user
+$user->assignRole('moderator');
+```
+
+## Project Structure
+
+```
+goals-app/
+├── app/
+│   ├── Http/
+│   │   └── Controllers/
+│   │       ├── AdminController.php    # Admin dashboard & CRUD
+│   │       └── GoalController.php     # Public goal views
+│   ├── Models/
+│   │   ├── User.php                   # User model with HasRoles trait
+│   │   ├── Goal.php                   # Goal model
+│   │   └── Category.php               # Category model
+│   ├── Services/
+│   │   ├── GoalService.php            # Goal business logic
+│   │   └── CategoryService.php        # Category business logic
+│   └── Providers/
+│       └── AppServiceProvider.php     # Service provider (no Gates needed)
+├── database/
+│   ├── migrations/
+│   │   └── create_permission_tables.php    # Spatie's permission tables
+│   └── seeders/
+│       ├── RoleAndPermissionSeeder.php     # Roles & permissions
+│       ├── UserSeeder.php                  # Default users
+│       ├── CategorySeeder.php              # Sample categories
+│       └── GoalSeeder.php                  # Sample goals
+├── resources/
+│   ├── js/
+│   │   ├── components/
+│   │   │   ├── baseComponent.js       # Base Alpine component
+│   │   │   └── goalManager.js         # Goal management component
+│   │   └── app.js                     # Main JS entry point
+│   └── views/
+│       ├── admin/
+│       │   └── index.blade.php        # Admin dashboard
+│       └── components/
+│           ├── admin/                 # Admin UI components
+│           ├── public/                # Public UI components
+│           └── ui/                    # Shared UI components
+└── routes/
+    └── web.php                        # Application routes
+```
+
+## Development
+
+### Running Tests
+
+```bash
+php artisan test
+```
+
+###  Building for Production
+
+```bash
+npm run build
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+```
+
+### Clearing Cache
+
+```bash
+php artisan cache:clear
+php artisan config:clear
+php artisan route:clear
+php artisan view:clear
+
+# Clear Spatie permission cache
+php artisan permission:cache-reset
+```
+
+## Spatie Permission Documentation
+
+For more information on using Spatie Laravel Permission, visit:
+- [Official Documentation](https://spatie.be/docs/laravel-permission)
+- [GitHub Repository](https://github.com/spatie/laravel-permission)
 
 ## License
 
