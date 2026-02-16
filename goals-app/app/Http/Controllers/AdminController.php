@@ -6,6 +6,7 @@ use App\Services\GoalService;
 use App\Services\CategoryService;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Gate;
 
 class AdminController extends Controller
 {
@@ -20,8 +21,13 @@ class AdminController extends Controller
 
     public function index()
     {
+        $user = auth()->user();
+
+        // Both admins and authors can now see all goals
+        $goalsQuery = $this->goalService->list();
+
         return view('admin.index', [
-            'goals' => $this->goalService->list(),
+            'goals' => $goalsQuery,
             'categories' => $this->categoryService->all()
         ]);
     }
@@ -38,7 +44,14 @@ class AdminController extends Controller
             'category_ids.*' => 'exists:categories,id',
         ]);
 
-        $goal = $request->id ? $this->goalService->find($request->id) : null;
+        if ($request->id) {
+            Gate::authorize('edit-goal');
+            $goal = $this->goalService->find($request->id);
+        } else {
+            Gate::authorize('create-goal');
+            $goal = null;
+        }
+
         $this->goalService->save($request->all(), $goal);
 
         return response()->json(['success' => true]);
@@ -51,7 +64,7 @@ class AdminController extends Controller
 
     public function destroy(int $id): JsonResponse
     {
-        \Illuminate\Support\Facades\Gate::authorize('delete-goal');
+        Gate::authorize('delete-goal');
 
         $goal = $this->goalService->find($id);
         $this->goalService->delete($goal);
