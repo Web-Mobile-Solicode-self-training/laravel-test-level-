@@ -9,7 +9,7 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class GoalService
 {
-    public function list(?int $categoryId = null, ?string $status = null, ?string $search = null, int $perPage = 10): LengthAwarePaginator
+    public function list(?int $categoryId = null, ?string $status = null, ?string $search = null, ?int $userId = null, int $perPage = 10): LengthAwarePaginator
     {
         return Goal::with('categories')
             ->when($categoryId, function ($query) use ($categoryId) {
@@ -19,6 +19,7 @@ class GoalService
             })
             ->when($status, fn($q) => $q->where('status', $status))
             ->when($search, fn($q) => $q->where('title', 'like', "%{$search}%"))
+            ->when($userId, fn($q) => $q->where('user_id', $userId))
             ->latest()
             ->paginate($perPage);
     }

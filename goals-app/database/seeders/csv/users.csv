@@ -1,2 +1,3 @@
-id,name,email,password
-1,Abdelhay Mallouli,admin@test.com,password
+id,name,email,password,role
+1,Abdelhay Mallouli,admin@test.com,password,admin
+2,Test Author,author@test.com,password,author

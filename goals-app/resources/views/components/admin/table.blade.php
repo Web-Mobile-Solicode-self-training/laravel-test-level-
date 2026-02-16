@@ -22,7 +22,7 @@
                     <tr class="goal-row hover:bg-slate-50/80 transition-colors group">
                         <td class="px-6 py-4">
                             <div class="relative flex-shrink-0">
-                                <img :src="goal.image ? '/storage/' + goal.image : 'https://placehold.co/100x100?text=Goal'"
+                                <img :src="goal.image ? '/storage/' + goal.image : 'https://placehold.co/600x400'"
                                     class="w-12 h-12 rounded-xl object-cover ring-1 ring-slate-200 shadow-sm">
                             </div>
                         </td>
@@ -55,10 +55,12 @@
                         </td>
                         <td class="px-6 py-4 text-right text-sm font-medium">
                             <div class="flex justify-end gap-2">
-                                <button @click="editGoal(goal)"
-                                    class="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all">
-                                    <i data-lucide="edit-3" class="w-4 h-4"></i>
-                                </button>
+                                @can('edit-goal')
+                                    <button @click="editGoal(goal)"
+                                        class="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all">
+                                        <i data-lucide="edit-3" class="w-4 h-4"></i>
+                                    </button>
+                                @endcan
                                 @can('delete-goal')
                                     <button @click="deleteGoal(goal.id)"
                                         class="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all">
